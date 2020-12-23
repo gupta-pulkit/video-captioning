@@ -10,3 +10,8 @@ dataset/
 
 ### Features ###
 *.npy
+
+### Models and other parameters ###
+*.h5
+*.json
+*.pickle
