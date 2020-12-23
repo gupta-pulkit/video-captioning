@@ -121,7 +121,7 @@ class Tokenizer_Prop(Tokenizer):
                  if token != 0]
         text = " ".join(words)
         return text
-    
+
     def captions_to_tokens(self, captions_listlist):
         tokens = [self.texts_to_sequences(captions_list) for captions_list in captions_listoflist]
         return tokens
@@ -160,10 +160,10 @@ def batch_generator(batch_size):
 
         # Count the number of tokens in all these token-sequences.
         num_tokens = [len(t) for t in tokens]
-        
+
         # Max number of tokens.
         max_tokens = np.max(num_tokens)
-        
+
         tokens_padded = pad_sequences(tokens,maxlen=max_tokens, padding='post',truncating='post')
 
         # The decoder-part of the neural network will try to map the token-sequences to themselves shifted one time-step....
@@ -182,9 +182,9 @@ def batch_generator(batch_size):
         {
             'decoder_output': decoder_output_data
         }
-        
+
         yield (x_data, y_data)
-        
+
 batch_size = 128
 
 generator = batch_generator(batch_size=batch_size)
@@ -223,10 +223,10 @@ def connect_decoder(transfer_values):
 
     # Start the decoder-network with its input-layer.....
     net = decoder_input
-    
+
     # Connect the embedding-layer....
     net = decoder_embedding(net)
-    
+
     # Connect all the GRU layers....
     net = decoder_gru1(net, initial_state=initial_state)
     net = decoder_gru2(net, initial_state=initial_state)
@@ -234,7 +234,7 @@ def connect_decoder(transfer_values):
 
     # Connect the final dense layer that converts to one-hot encoded arrays....
     decoder_output = decoder_dense(net)
-    
+
     return decoder_output
 
 decoder_output = connect_decoder(transfer_values=transfer_values_input)
@@ -261,7 +261,7 @@ def generate_caption(max_tokens=50):
 
     # Process the image with the pre-trained image-model to get the transfer-values....
     transfer_values_test = image_features_extract_model.predict(image_batch)
-    
+
     # Pre-allocate the 2-dim array used as input to the decoder.
     # This holds just a single sequence of integer-tokens,
     # but the decoder-model expects a batch of sequences.
@@ -288,7 +288,7 @@ def generate_caption(max_tokens=50):
             'transfer_values_input': transfer_values_test,
             'decoder_input': decoder_input_data
         }
-        
+
         # Input this data to the decoder and get the predicted output....
         decoder_output = decoder_model.predict(x_data)
 
@@ -313,7 +313,7 @@ def generate_caption(max_tokens=50):
     # Plot the image.....
     plt.imshow(test_image)
     plt.show()
-    
+
     # Print the predicted caption....
     print("Predicted caption:")
     print(output_text)
